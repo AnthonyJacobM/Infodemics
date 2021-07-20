@@ -1,2 +1,2 @@
 # Infodemics
-Modelling the coevolution of pandemic and infodemic
+Modeling the co-evolution of pandemic and infodemic
