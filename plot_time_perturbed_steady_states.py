@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 import generate_ode
 import matplotlib as mpl
 
+from generate_ode import generate_ode
+from generate_pointset import generate_pointset
+
 # dpi changes resolution of figures
 mpl.rcParams['figure.dpi'] = 200
 mpl.rcParams['savefig.dpi'] = 200
