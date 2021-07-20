@@ -1,14 +1,20 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import generate_ode
+import matplotlib as mpl
+
+# dpi changes resolution of figures
+mpl.rcParams['figure.dpi'] = 200
+mpl.rcParams['savefig.dpi'] = 200
+
+# fontsize is 18
+mpl.rcParams['font.size'] = 18
+
+# linewidth is 2
+mpl.rcParams['lines.linewidth'] = 2.0
 
 
 # using initial conditions and parameters generated previously!
-
-
-
-
-
 par_dict_def = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.10, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,

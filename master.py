@@ -3,6 +3,7 @@ from PyDSTool import *
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import matplotlib as mpl
 from generate_ode import generate_ode
 from generate_pointset import generate_pointset
 from generate_protection_bifurcation import generate_protection_bifurcation
@@ -12,6 +13,16 @@ from generate_bifurcation_2d import generate_bifurcation_2d
 from plot_nullclines import plot_nullclines_new as plot_nullclines
 from get_data import get_data
 from plot_time_perturbed_steady_states import plot_time_perturbed_steady_state as plot_time_perturbed_steady_states
+
+# dpi changes resolution of figures
+mpl.rcParams['figure.dpi'] = 200
+mpl.rcParams['savefig.dpi'] = 200
+
+# fontsize is 18
+mpl.rcParams['font.size'] = 18
+
+# linewidth is 2
+mpl.rcParams['lines.linewidth'] = 2.0
 
 
 # Master code to run for all the bifurcations
@@ -46,19 +57,19 @@ ode = generate_ode(eq1_h1_par_dict, ics_dict = eq1_h1_ss)
 pts, ss_dict = generate_pointset(ode, save_bool = True)
 
 # generate risk bifurcation!
-PC = generate_risk_bifurcation(ics_dict = eq1_h1_ss, par_dict = eq1_h1_par_dict, tend = 300)
+PC = generate_risk_bifurcation(ode, ics_dict = eq1_h1_ss, par_dict = eq1_h1_par_dict, tend = 300)
 
 # get the data
 par_dict, ss_dict, data = get_data(PC, curve = 'EQrisk', special_point = 'H1', par_dict = eq1_h1_par_dict)
 # use EQrisk2 and BP1 (see generate_risk_bifurcation) for more details!
 
 # generate a pointset and plot the time around the bifurcation!
-pts = plot_time_perturbed_steady_states(PAR_dict = par_dict, ss_dict = ss_dict, data = data, tend = 10_000, ode = ode, par = 'risk', random_bool = True, eps = 0.01)
+pts = plot_time_perturbed_steady_states(PAR_dict = par_dict, ss_dict = ss_dict, tend = 10_000, par = 'risk', random_bool = True, eps = 0.01)
 
 
 # plot a few nulllclines
 # sg vs sb nullcline
-plot_nullclines(option = 'A', PTS = pts, par_dict = par_dict, ss_dict = ss_dict, evecs_bool = False, xlow = -0.0, xhigh = 0.65, n_bin = 200)
+plot_nullclines(option = 'A', PTS = pts, par_dict = par_dict, ss_dict = ss_dict, evecs_bool = False, xhigh = 0.65, n_bin = 200)
 # sb vs ib nullcline
 plot_nullclines(option = 'B', PTS = pts, par_dict = par_dict, ss_dict = ss_dict, evecs_bool = False, xhigh = 0.65, n_bin = 200)
 # ib vs v nullcline

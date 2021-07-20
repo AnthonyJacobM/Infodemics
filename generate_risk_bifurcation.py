@@ -3,6 +3,18 @@ import generate_ode
 import PyDSTool as dst
 from PyDSTool import *
 
+import matplotlib as mpl
+
+# dpi changes resolution of figures
+mpl.rcParams['figure.dpi'] = 200
+mpl.rcParams['savefig.dpi'] = 200
+
+# fontsize is 18
+mpl.rcParams['font.size'] = 18
+
+# linewidth is 2
+mpl.rcParams['lines.linewidth'] = 2.0
+
 # initial parameter definition!
 par_dict_def = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.10, 'protection': 0.90,
@@ -79,7 +91,7 @@ eq2_h2_ss = {'x1':  0.20993799319537826,
 eq2_h2_par = eq1_h1_par_dict
 eq2_h2_par['misinformation'] = 0.0660611192767927
 
-def generate_risk_bifurcation(ics_dict = eq1_h1_ss, par_dict = eq1_h1_par_dict, max_points = 250, tend = 1000):
+def generate_risk_bifurcation(ode, ics_dict = eq1_h1_ss, par_dict = eq1_h1_par_dict, max_points = 250, tend = 1000):
     """
     function to generate a bifurcation for risk of vaccination relative to infection
     :param ics_dict: dictionary of initial conditions
