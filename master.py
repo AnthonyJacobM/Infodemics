@@ -10,7 +10,7 @@ from generate_protection_bifurcation import generate_protection_bifurcation
 from generate_education_bifurcation import generate_education_bifurcation
 from generate_risk_bifurcation import generate_risk_bifurcation
 from generate_bifurcation_2d import generate_bifurcation_2d
-from plot_nullclines import plot_nullclines_new as plot_nullclines
+from plot_nullclines import plot_nullclines
 from get_data import get_data
 from plot_time_perturbed_steady_states import plot_time_perturbed_steady_state as plot_time_perturbed_steady_states
 
@@ -51,7 +51,7 @@ eq1_h1_par_dict['risk'] = 1.635295791362042
 # generate an ode
 
 # generate the ode
-ode = generate_ode(eq1_h1_par_dict, ics_dict = eq1_h1_ss)
+ode = generate_ode(eq1_h1_par_dict, ics_dict = eq1_h1_ss, tf=500)
 
 # generate a pointset!
 pts, ss_dict = generate_pointset(ode, save_bool = True)
@@ -64,7 +64,7 @@ par_dict, ss_dict, data = get_data(PC, curve = 'EQrisk', special_point = 'H1', p
 # use EQrisk2 and BP1 (see generate_risk_bifurcation) for more details!
 
 # generate a pointset and plot the time around the bifurcation!
-pts = plot_time_perturbed_steady_states(PAR_dict = par_dict, ss_dict = ss_dict, tend = 10_000, par = 'risk', random_bool = True, eps = 0.01)
+pts = plot_time_perturbed_steady_states(PAR_dict = par_dict, ss_dict = ss_dict, tend = 1_000, par = 'risk', random_bool = True, eps = 0.01)
 
 
 # plot a few nulllclines
