@@ -7,6 +7,9 @@ from generate_ode import generate_ode
 from generate_pointset import generate_pointset
 from sys_dx import sys_dx
 
+path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
+
+
 # get dictionary corresponding to multiple parameters and initial conditions!
 # initial parameter definition!
 par_dict_def = {'recovery': 0.07, 'belief': 1.0,
@@ -87,7 +90,7 @@ eq2_h2_par['misinformation'] = 0.0660611192767927
 
 def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1_ss, n_bin=100, xlow=0, xhigh=1.0,
                         ylow=0, yhigh=1.0, quiv_bool=True, ext_bool=False, ss_dict_2=eq1_lp1_ss,
-                        par_dict_2=eq1_lp1_par_dict, evecs_bool=False, evecs=None, ics_dict={}):
+                        par_dict_2=eq1_lp1_par_dict, evecs_bool=False, evecs=None, ics_dict={}, par = 'risk'):
     """
     function to generate nullclines with a quiver plot field determined using sys_dx function
     :param option: 'A' for SG vs IB, 'B' for SB vs IB, 'C' for IB vs V
@@ -326,6 +329,8 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
     plt.ylim([ylow, yhigh])
     plt.plot(x_traj[0:], y_traj[0:], 'k')
     plt.legend()
+    file_name = f"\{par}_{dx_x}_{dx_y}_nullcline.jpeg"
+    plt.savefig(path + file_name, dpi = 300)
     plt.show()
 
     # time plot

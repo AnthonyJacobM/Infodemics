@@ -6,6 +6,9 @@ import matplotlib as mpl
 from generate_ode import generate_ode
 from generate_pointset import generate_pointset
 
+path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
+
+
 # dpi changes resolution of figures
 mpl.rcParams['figure.dpi'] = 200
 mpl.rcParams['savefig.dpi'] = 200
@@ -151,6 +154,9 @@ def plot_time_perturbed_steady_state(PAR_dict=par_dict, ss_dict=ss_dict, tend=10
     plt.xlabel('t (Days)')
     plt.ylabel('Population')
     plt.legend()
+    par_lab = par.title()
+    file_name = f"\{par_lab}_time_series.jpeg"
+    plt.savefig(path + file_name, dpi=300)
     plt.show()
 
     plt.plot(t, infected, 'r', label=r'$I$')

@@ -75,8 +75,8 @@ eq2_h2_par = eq1_h1_par_dict
 eq2_h2_par['misinformation'] = 0.0660611192767927
 
 
-ss_dict = ss_bp_r
-par_dict = par_hopf_r
+#ss_dict = ss_bp_r
+#par_dict = par_hopf_r
 
 
 def get_data(PC, curve='EQrisk', special_point='H1', par='risk', par_ext='', par_dict=eq1_h1_par_dict):

@@ -3,6 +3,9 @@ from PyDSTool import *
 import numpy as np
 import matplotlib.pyplot as plt
 
+path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
+
+
 # get all dictionary for parameters and initial conditions!
 
 par_dict_def = {'recovery': 0.07, 'belief': 1.0,

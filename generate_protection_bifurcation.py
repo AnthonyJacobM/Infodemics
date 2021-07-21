@@ -2,6 +2,10 @@ import matplotlib.pyplot as plt
 import generate_ode
 import PyDSTool as dst
 from PyDSTool import *
+from generate_ode import generate_ode
+
+path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
+
 
 # initial parameter definition!
 par_dict_def = {'recovery': 0.07, 'belief': 1.0,
@@ -80,7 +84,7 @@ eq2_h2_par = eq1_h1_par_dict
 eq2_h2_par['misinformation'] = 0.0660611192767927
 
 
-def generate_protection_bifurcation(ODE=ode, ics_dict=eq1_h1_ss, par_dict=eq1_h1_par_dict, max_points=150, tend=1000):
+def generate_protection_bifurcation(ode, ics_dict=eq1_h1_ss, par_dict=eq1_h1_par_dict, max_points=150, tend=1000):
     """
     function to generate a bifurcation for risk of vaccination relative to infection
     :param ODE: generated previously
@@ -94,7 +98,7 @@ def generate_protection_bifurcation(ODE=ode, ics_dict=eq1_h1_ss, par_dict=eq1_h1
     # pts, ss_dict = generate_pointset(ode)
 
     # use the initial conditions at the steady state
-    # ode.set(ics = ss_dict)
+    #ode.set(ics = ss_dict)
 
     # generate a coninuation curve
     PC = ContClass(ode)
@@ -158,6 +162,8 @@ def generate_protection_bifurcation(ODE=ode, ics_dict=eq1_h1_ss, par_dict=eq1_h1
         plt.title('')  # no title
         plt.ylabel(ylab_array[z])
         plt.xlabel(r'$\delta$')
+        file_name = f"\protection_{z0}.jpeg"
+        plt.savefig(path + file_name, dpi = 300)
         plt.show()
 
     return PC

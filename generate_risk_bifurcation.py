@@ -1,7 +1,10 @@
 import matplotlib.pyplot as plt
-import generate_ode
 import PyDSTool as dst
 from PyDSTool import *
+from generate_ode import generate_ode
+
+path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
+
 
 import matplotlib as mpl
 
@@ -186,6 +189,8 @@ def generate_risk_bifurcation(ode, ics_dict = eq1_h1_ss, par_dict = eq1_h1_par_d
         plt.title('')  # no title
         plt.ylabel(ylab_array[z])
         plt.xlabel(r'$r$')
+        file_name = f"\Risk_{z0}.jpeg"
+        plt.savefig(path + file_name, dpi = 300)
         plt.show()
 
     return PC

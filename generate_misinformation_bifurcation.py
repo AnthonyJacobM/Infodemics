@@ -2,6 +2,10 @@ import matplotlib.pyplot as plt
 import generate_ode
 import PyDSTool as dst
 from PyDSTool import *
+from generate_ode import generate_ode
+
+path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
+
 
 # initial parameter definition!
 par_dict_def = {'recovery': 0.07, 'belief': 1.0,
@@ -83,7 +87,7 @@ eq2_h2_par['misinformation'] = 0.0660611192767927
 
 
 # --
-def generate_misinformation_bifurcation(ODE=ode, ics_dict=eq1_h1_ss, par_dict=eq1_h1_par_dict, max_points=200,
+def generate_misinformation_bifurcation(ode, ics_dict=eq1_h1_ss, par_dict=eq1_h1_par_dict, max_points=200,
                                         tend=1000):
     """
     function to generate a bifurcation for risk of vaccination relative to infection
@@ -94,7 +98,7 @@ def generate_misinformation_bifurcation(ODE=ode, ics_dict=eq1_h1_ss, par_dict=eq
     :param tend: final point in the time domain
     :return: plotted bifurcation
     """
-    ode = generate_ode(par_dict, ics_dict, tf=tend)  # generate a pointset
+    # ode = generate_ode(par_dict, ics_dict, tf=tend)  # generate a pointset
     # pts, ss_dict = generate_pointset(ode)
 
     # use the initial conditions at the steady state
@@ -171,6 +175,8 @@ def generate_misinformation_bifurcation(ODE=ode, ics_dict=eq1_h1_ss, par_dict=eq
         plt.title('')  # no title
         plt.ylabel(ylab_array[z])
         plt.xlabel(r'$\tilde{\chi}_{bg}$')
+        file_name = f"\misinformation_{z0}.jpeg"
+        plt.savefig(path + file_name, dpi = 300)
         plt.show()
 
     return PC
