@@ -66,6 +66,9 @@ eq1_lp1_par_dict['risk'] = 0.1295293020919909
 eq1_h1_par_dict = par_bp_r
 eq1_h1_par_dict['risk'] = 1.635295791362042
 
+eq2_h2_par = eq1_h1_par_dict
+eq2_h2_par['misinformation'] = 0.0660611192767927
+
 par_hopf_r = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.387844, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,
