@@ -249,8 +249,7 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
 
         # x null --> solve for y = x4
         # x_null = (misinformation * x2_ss - recovery + education * (x2_ss + x_array - 1)) / ((protection - 1) * infection_good)
-        x_null = np.ones(n_bin) * (recovery + education * (x1_ss + ig_ss) - infection_bad * x2_ss) / (
-                    (1 - protection) * infection_good)
+        x_null = np.ones(n_bin) * (recovery + education * (x1_ss + ig_ss) - infection_bad * x2_ss) / ((1 - protection) * infection_good)
         # y null --> solve for x = x3
         y_null = (x5_ss * x1_ss) / ((1 - protection) * infection_good * y_array)
 
@@ -334,7 +333,7 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
     plt.show()
 
     # time plot
-    plt.plot(t, x1_traj, 'b-', label='$S_G$')
+    """plt.plot(t, x1_traj, 'b-', label='$S_G$')
     plt.plot(t, x2_traj, 'r--', label='$S_B$')
     plt.plot(t, x3_traj, 'r', label='$I_B$')
     plt.plot(t, x4_traj, 'b:', label='$V$')
@@ -342,4 +341,4 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
     plt.legend()
     plt.xlabel('t (Days)')
     plt.ylabel('Fraction of the Population')
-    plt.show()
+    plt.show()"""

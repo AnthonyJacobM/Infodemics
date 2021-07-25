@@ -1,11 +1,22 @@
 import matplotlib.pyplot as plt
-import generate_ode
 import PyDSTool as dst
 from PyDSTool import *
 from generate_ode import generate_ode
 
 path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
 
+
+import matplotlib as mpl
+
+# dpi changes resolution of figures
+mpl.rcParams['figure.dpi'] = 200
+mpl.rcParams['savefig.dpi'] = 200
+
+# fontsize is 18
+mpl.rcParams['font.size'] = 18
+
+# linewidth is 2
+mpl.rcParams['lines.linewidth'] = 2.0
 
 # initial parameter definition!
 par_dict_def = {'recovery': 0.07, 'belief': 1.0,
@@ -72,7 +83,7 @@ par_hopf_r = {'recovery': 0.07, 'belief': 1.0,
             'infection_good': 0.048, 'infection_bad': 0.37}
 
 
-# this is the steady state value for misinformation starting from the hopf on the risk bifurcation
+# this is the steady state value for misinormation starting from the hopf on the risk bifurcation
 
 eq2_h2_ss = {'x1':  0.20993799319537826,
              'x2':  0.48221092580065467,
@@ -83,18 +94,15 @@ eq2_h2_ss = {'x1':  0.20993799319537826,
 eq2_h2_par = eq1_h1_par_dict
 eq2_h2_par['misinformation'] = 0.0660611192767927
 
-
-def generate_education_bifurcation(ode, ics_dict = eq1_h1_ss, par_dict = eq1_h1_par_dict, max_points = 200, tend = 1000):
+def generate_recovery_bifurcation(ode, ics_dict = eq1_h1_ss, par_dict = eq1_h1_par_dict, max_points = 250, tend = 1000):
     """
     function to generate a bifurcation for risk of vaccination relative to infection
-    :param ODE: generated previously
     :param ics_dict: dictionary of initial conditions
     :param par_dict: dictionary of parameters
     :param max_points: maximum number of points for a bifurcation
     :param tend: final point in the time domain
     :return: plotted bifurcation
     """
-    #ode = generate_ode(par_dict, ics_dict, tf = tend)    # generate a pointset
     # pts, ss_dict = generate_pointset(ode)
 
     # use the initial conditions at the steady state
@@ -102,15 +110,15 @@ def generate_education_bifurcation(ode, ics_dict = eq1_h1_ss, par_dict = eq1_h1_
 
     # generate a coninuation curve
     PC = ContClass(ode)
-    PCargs = dst.args(name = 'EQeducation', type = 'EP-C')
-    PCargs.freepars = ['education']  # should be one of the parameters from DSargs.pars --
+    PCargs = dst.args(name = 'EQrecovery', type = 'EP-C')
+    PCargs.freepars = ['recovery']  # should be one of the parameters from DSargs.pars --
 
     # change the default settings for the numerical continuation
     PCargs.MaxNumPoints = max_points  # The following 3 parameters are set after trial-and-error
     # choose carefully
-    PCargs.MaxStepSize = 0.001
+    PCargs.MaxStepSize = 0.01
     PCargs.MinStepSize = 1e-5
-    PCargs.StepSize = 1e-3
+    PCargs.StepSize = 1e-4
     PCargs.LocBifPoints = 'all'  # detect limit points / saddle-node bifurcations
     PCargs.SaveEigen = True  # to tell unstable from stable branches
     PCargs.SaveJacobian = True  # saves the Jacobian data which can be used for the nullclines!
@@ -120,68 +128,53 @@ def generate_education_bifurcation(ode, ics_dict = eq1_h1_ss, par_dict = eq1_h1_
     PC.newCurve(PCargs)
 
     # continue backwards and forwards!
-    PC['EQeducation'].forward()
-    PC['EQeducation'].backward()
+    PC['EQrecovery'].forward()
+    PC['EQrecovery'].backward()
 
+    # update the curve along the branching point!
+    """eq_risk_bp_ss = {'x1': 0.0005714445346933421, 
+                 'x2': 0.1893893682498801, 
+                 'x3': 0.1968691906600376,
+                 'x4': 0.6047210552785887,
+                 'x5': 1.0}
 
-    PCargs.name = 'EQeducation2'
+    eq_risk_bp_par = {'recovery': 0.07, 'belief': 1.0,
+                'risk': 0.34021985, 'protection': 0.90,
+                'education': 0.33, 'misinformation': 0.10,
+                'infection_good': 0.048, 'infection_bad': 0.37}
+    ode.set(ics = eq_risk_bp_ss,
+           pars = eq_risk_bp_par)"""
+
+    """PCargs.initpoint = {'x1': 0.0005714445346933421, 
+                 'x2': 0.1893893682498801, 
+                 'x3': 0.1968691906600376,
+                 'x4': 0.6047210552785887,
+                 'x5': 1.0, 
+                 'risk': 0.0}"""
+
+    """PCargs.name = 'EQrisk2'
     PCargs.type = 'EP-C'
+    PCargs.initpoint = {'x1': 0.0005714445346933421,
+                        'x2': 0.1893893682498801,
+                        'x3': 0.1968691906600376,
+                        'x4': 0.6047210552785887,
+                        'x5': 1.0,
+                        'risk': 0.0}
 
-    # PCargs.initpoint = {'x1': 0.00045686505623685283,
-    #                    'x2': 0.1894318195395322,
-    #                    'x3': 0.1968176793050778,
-    #                    'x4': 0.6064537764311808,
-    #                    'x5': 0.9999999999999999,
-    #                    'misinformation': 0.35}
-
-
-    """
-    LP Point found 
-    ========================== 
-    0 : 
-    x1  =  0.05291675637403153
-    x2  =  0.20334289508621275
-    x3  =  0.40825986806257114
-    x4  =  0.2822227208716318
-    x5  =  0.010451453370836366
-    education  =  0.06208213130305199
-    """
-
-
-    dict = {'x1': 0.05291675637403153,
-            'x2': 0.20334289508621275,
-            'x3': 0.40825986806257114,
-            'x4': 0.2822227208716318,
-            'x5': 0.010451453370836366,
-            'education': 0.0}
-
-
-    dict = {'x1': 5.959501440455008e-14,
-            'x2': 0.1891891891891843,
-            'x3': 0.8108108108108129,
-            'x4': -5.434278100754251e-14,
-            'x5': 1.0,
-            'education': 0.0}
-
-
-
-    PCargs.initpoint = dict
-
-    PCargs.freepars = ['education']  # should be one of the parameters from DSargs.pars
+    PCargs.freepars = ['risk']  # should be one of the parameters from DSargs.pars
     # change the default settings for the numerical continuation
-    PCargs.MaxNumPoints = int(1.2 * max_points)  # The following 3 parameters are set after trial-and-error
+    PCargs.MaxNumPoints = int(1.0 * max_points)  # The following 3 parameters are set after trial-and-error
     PCargs.MaxStepSize = 0.01
-    PCargs.MinStepSize = 1e-7
-    PCargs.StepSize = 1e-4
+    PCargs.MinStepSize = 1e-5
+    PCargs.StepSize = 0.1e-3
     PCargs.StopAtPoints = 'B'
-    PCargs.LocBifPoints = 'all'  # detect limit points / saddle-node bifurcations
+    PCargs.LocBifPoints = 'BP'  # detect limit points / saddle-node bifurcations
     PCargs.SaveEigen = True  # to tell unstable from stable branches
     PCargs.SaveJacobian = True  # saves the Jacobian data which can be used for the nullclines!
 
     # PC.update(PCargs)
     PC.newCurve(PCargs)
-    #PC['EQeducation2'].forward()
-    #PC['EQeducation2'].backward()
+    PC['EQrisk2'].forward()"""
 
     # begin plotting
     yvar_array = ['x4', 'x3', 'x2', 'x1']
@@ -189,16 +182,14 @@ def generate_education_bifurcation(ode, ics_dict = eq1_h1_ss, par_dict = eq1_h1_
     col_array = ['b', 'r', 'k', 'orange']
     for z, z0 in enumerate(yvar_array):
         # display the bifurcation!
-        PC.display(['education', yvar_array[z]], stability=True, color=col_array[z])  # x variable vs y variable!
+        PC.display(['recovery', yvar_array[z]], stability=True, color=col_array[z])  # x variable vs y variable!
         # disable the boundary
         PC.plot.toggleLabels(visible='off', bylabel=None, byname=None, bytype='P')
         PC.plot.toggleLabels(visible='off', bylabel=None, byname=None, bytype='B')
-        PC.plot.toggleLabels(visible='off', bylabel=None, byname='H4')
-
         plt.title('')  # no title
         plt.ylabel(ylab_array[z])
-        plt.xlabel(r'$\tilde{\chi}_{gb}$')
-        file_name = f"\education_{z0}.jpeg"
+        plt.xlabel(r'$\gamma$')
+        file_name = f"\Recovery_{z0}.jpeg"
         plt.savefig(path + file_name, dpi = 300)
         plt.show()
 

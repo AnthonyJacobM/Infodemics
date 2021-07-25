@@ -146,11 +146,11 @@ def plot_time_perturbed_steady_state(PAR_dict=par_dict, ss_dict=ss_dict, tend=10
     ig = 1 - (sb + sg + ib + v)
 
     # plottiing equations of state
-    plt.plot(t, sb, 'r', label=r'$S_B$')
-    plt.plot(t, ib, 'r--', label=r'$I_B$')
-    plt.plot(t, sg, 'b', label=r'$S_G$')
-    plt.plot(t, v, 'b--', label='$V$')
-    plt.plot(t, phi, 'm', label='$\phi$')
+    plt.plot(t, sb, 'r', label=r'$S_B$', lw = 2)
+    plt.plot(t, ib, 'r--', label=r'$I_B$', lw = 2)
+    plt.plot(t, sg, 'b', label=r'$S_G$', lw = 2)
+    plt.plot(t, v, 'b--', label='$V$', lw = 2)
+    plt.plot(t, phi, 'm', label='$\phi$', lw = 2)
     plt.xlabel('t (Days)')
     plt.ylabel('Population')
     plt.legend()
@@ -173,5 +173,19 @@ def plot_time_perturbed_steady_state(PAR_dict=par_dict, ss_dict=ss_dict, tend=10
     plt.ylabel('Population')
     plt.legend()
     plt.show()
+
+    # plot the effective reproductive number
+    reff_num = par_dict['infection_bad'] * sb + (1 - par_dict['protection']) * par_dict['infection_good'] * v
+    reff_den = par_dict['recovery'] + par_dict['education'] * good
+    reff = reff_num / reff_den
+    reff = 1 + (1 - par_dict['protection']) * par_dict['infection_good'] * v + par_dict['infection_bad'] * sb - par_dict['recovery'] -  par_dict['education'] * good
+    plt.plot(t, reff, 'b', lw = 2)
+    plt.xlabel('t (Days)')
+    plt.ylabel('$R_{eff}$')
+    par_lab = par.title()
+    file_name = f"\{par_lab}_reff.jpeg"
+    plt.savefig(path + file_name, dpi=300)
+    plt.show()
+
 
     return pts

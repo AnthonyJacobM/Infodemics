@@ -47,7 +47,7 @@ def generate_limit_cycle_boundary(PC, curve = 'EQmisinformation', special_point 
     elif xpar == 'infection_good':
         xlab = r'$\chi_{gb}$'
     elif xpar == 'infection_bad':
-        xlab = r'$\chi_{bb}$'
+        xlab = r'$\hat{\chi}_{bb}$'
     elif xpar == 'protection':
         xlab = '$\delta$'
     elif xpar == 'recovery':
@@ -72,7 +72,7 @@ def generate_limit_cycle_boundary(PC, curve = 'EQmisinformation', special_point 
     elif ypar == 'infection_good':
         ylab = r'$\chi_{gb}$'
     elif ypar == 'infection_bad':
-        ylab = r'$\chi_{bb}$'
+        ylab = r'$\hat{\chi}_{bb}$'
     elif ypar == 'protection':
         ylab = '$\delta$'
     elif ypar == 'recovery':
@@ -96,9 +96,16 @@ def generate_limit_cycle_boundary(PC, curve = 'EQmisinformation', special_point 
     lc_x = PC_2d[name_curve].sol[xpar]
     lc_y = PC_2d[name_curve].sol[ypar]
 
+    # get state variables along the boundary
+    x1_ss = PC_2d[name_curve].sol['x1']
+    x2_ss = PC_2d[name_curve].sol['x2']
+    x3_ss = PC_2d[name_curve].sol['x3']
+    x4_ss = PC_2d[name_curve].sol['x4']
+    x5_ss = PC_2d[name_curve].sol['x5']
+
     # fill in between to obtain the limit cycle boundary
     # generate a plot for the limit cycle boundary!
-    plt.plot(lc_x, lc_y, 'b')
+    plt.plot(lc_x, lc_y, 'b', lw = 3.5)
     plt.fill(lc_x, lc_y, 'k')
     plt.xlabel(xlab, fontsize = 18)
     plt.ylabel(ylab, fontsize = 18)
@@ -111,3 +118,10 @@ def generate_limit_cycle_boundary(PC, curve = 'EQmisinformation', special_point 
     # save the data to a numpy array for later
     np.savetxt(f"lc_{xpar}_{ypar}_xsol.txt", lc_x, delimiter = ',')
     np.savetxt(f"lc_{xpar}_{ypar}_ysol.txt", lc_y, delimiter = ',')
+
+    # save the steady state data!
+    np.savetxt(f"lc_{xpar}_{ypar}_x1_ss.txt", x1_ss, delimiter=',')
+    np.savetxt(f"lc_{xpar}_{ypar}_x2_ss.txt", x2_ss, delimiter=',')
+    np.savetxt(f"lc_{xpar}_{ypar}_x3_ss.txt", x3_ss, delimiter=',')
+    np.savetxt(f"lc_{xpar}_{ypar}_x4_ss.txt", x4_ss, delimiter=',')
+    np.savetxt(f"lc_{xpar}_{ypar}_x5_ss.txt", x5_ss, delimiter=',')
