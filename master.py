@@ -10,7 +10,6 @@ from generate_protection_bifurcation import generate_protection_bifurcation
 from generate_education_bifurcation import generate_education_bifurcation
 from generate_risk_bifurcation import generate_risk_bifurcation
 from generate_misinformation_bifurcation import generate_misinformation_bifurcation
-from generate_bifurcation_2d import generate_bifurcation_2d
 from generate_infection_good_bifurcation import generate_infection_good_bifurcation
 from generate_infection_bad_bifurcation import generate_infection_bad_bifurcation
 from generate_recovery_bifurcation import generate_recovery_bifurcation
@@ -145,7 +144,7 @@ plot_nullclines(option = 'C', PTS = pts, par_dict = par_dict, ss_dict = ss_dict,
 PC_infection_bad = generate_infection_bad_bifurcation(ode, ics_dict = ss_dict, par_dict = par_dict, tend = 300, max_points = 150)
 
 # get the data
-par_dict, ss_dict, data = get_data(PC_infection_bad, curve = 'EQinfection_bad', special_point = 'H1', par_dict = par_dict, par = 'infection_bad')
+par_dict, ss_dict, data = get_data(PC_infection_bad, curve = 'EQinfection_bad', special_point = 'H3', par_dict = par_dict, par = 'infection_bad')
 
 # generate a pointset and plot the time around the bifurcation!
 pts = plot_time_perturbed_steady_states(PAR_dict = par_dict, ss_dict = ss_dict, tend = 5_000, par = 'infection_bad', random_bool = True, eps = 0.25)
@@ -171,7 +170,7 @@ PC_infection_good = generate_infection_good_bifurcation(ode, ics_dict = ss_dict,
 par_dict, ss_dict, data = get_data(PC_infection_good, curve = 'EQinfection_good', special_point = 'H1', par_dict = par_dict, par = 'infection_good')
 
 # generate a pointset and plot the time around the bifurcation!
-pts = plot_time_perturbed_steady_states(PAR_dict = par_dict, ss_dict = ss_dict, tend = 5_000, par = 'recovery', random_bool = True, eps = 0.25)
+pts = plot_time_perturbed_steady_states(PAR_dict = par_dict, ss_dict = ss_dict, tend = 5_000, par = 'infection_good', random_bool = True, eps = 0.25)
 
 
 # plot a few nulllclines
