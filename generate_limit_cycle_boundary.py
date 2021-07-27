@@ -38,6 +38,7 @@ def generate_limit_cycle_boundary(PC, curve = 'EQmisinformation', special_point 
     :return: plotted figure in matplotlib
     """
 
+
     if xpar == 'risk':
         xlab = '$r$'
     elif xpar == 'education':
@@ -104,20 +105,46 @@ def generate_limit_cycle_boundary(PC, curve = 'EQmisinformation', special_point 
     x5_ss = PC_2d[name_curve].sol['x5']
 
     # fill in between to obtain the limit cycle boundary
+    fig = plt.figure()
+    ax = fig.add_subplot(1,1,1)
+
     # generate a plot for the limit cycle boundary!
-    plt.plot(lc_x, lc_y, 'b', lw = 3.5)
+    plt.plot(lc_x, lc_y, 'b', lw = 5)
     plt.fill(lc_x, lc_y, 'k')
     plt.xlabel(xlab, fontsize = 18)
     plt.ylabel(ylab, fontsize = 18)
     #plt.xlim([0, xmax])
     #plt.ylim([0, ymax])
+
+    # get the current axes limits
+    xlimit = np.array(ax.get_xlim())
+    ylimit = np.array(ax.get_ylim())
+
+    par_x_lb = xlimit[0]
+    par_x_ub = xlimit[-1]
+    par_y_lb = ylimit[0]
+    par_y_ub = ylimit[-1]
+
+    print(par_x_lb, par_x_ub, par_y_lb, par_y_ub)
+
+    xlimit = np.array([par_x_lb, par_x_ub])
+    ylimit = np.array([par_y_lb, par_y_ub])
+
     file_name = f"\lc_{xpar}_{ypar}.jpeg"
     plt.savefig(path + file_name, dpi = 300)
     plt.show()
 
+    # get axes limit
+    xlimit = ax.get_xlim()
+    ylimit = ax.get_ylim()
+    print('xlimit: ', xlimit, 'ylimit: ', ylimit)
+
+
     # save the data to a numpy array for later
     np.savetxt(f"lc_{xpar}_{ypar}_xsol.txt", lc_x, delimiter = ',')
     np.savetxt(f"lc_{xpar}_{ypar}_ysol.txt", lc_y, delimiter = ',')
+    np.savetxt(f"lc_{xpar}_{ypar}_xlimit.txt", np.array(xlimit), delimiter = ',')
+    np.savetxt(f"lc_{xpar}_{ypar}_ylimit.txt", np.array(ylimit), delimiter = ',')
 
     # save the steady state data!
     np.savetxt(f"lc_{xpar}_{ypar}_x1_ss.txt", x1_ss, delimiter=',')

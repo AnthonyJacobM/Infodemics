@@ -145,7 +145,7 @@ def plot_time_perturbed_steady_state(PAR_dict=par_dict, ss_dict=ss_dict, tend=10
     healthy = sg + sb + v
     ig = 1 - (sb + sg + ib + v)
 
-    # plottiing equations of state
+    # plotting equations of state
     plt.plot(t, sb, 'r', label=r'$S_B$', lw = 2)
     plt.plot(t, ib, 'r--', label=r'$I_B$', lw = 2)
     plt.plot(t, sg, 'b', label=r'$S_G$', lw = 2)
@@ -159,7 +159,7 @@ def plot_time_perturbed_steady_state(PAR_dict=par_dict, ss_dict=ss_dict, tend=10
     plt.savefig(path + file_name, dpi=300)
     plt.show()
 
-    plt.plot(t, infected, 'r', label=r'$I$')
+    """plt.plot(t, infected, 'r', label=r'$I$')
     plt.plot(t, healthy, 'b', label=r'$S + V$')
     plt.xlabel('t (Days)')
     plt.ylabel('Population')
@@ -172,7 +172,7 @@ def plot_time_perturbed_steady_state(PAR_dict=par_dict, ss_dict=ss_dict, tend=10
     plt.xlabel('t (Days)')
     plt.ylabel('Population')
     plt.legend()
-    plt.show()
+    plt.show()"""
 
     # plot the effective reproductive number
     reff_num = par_dict['infection_bad'] * sb + (1 - par_dict['protection']) * par_dict['infection_good'] * v
