@@ -124,7 +124,7 @@ def generate_ode(par_dict = par_dict_def, ics_dict = ics_dict_def, tf = tend):
     # generate bounds on parameters!
     DSargs.pdomain = {'education': [0, 1], 'misinformation': [0, 1],
                       'infection_bad': [0, 1], 'infection_ bad': [0, 1],
-                      'protection': [0, 1], 'risk': [0, 5],
+                      'protection': [0, 1], 'risk': [0, 6],
                       'belief': [0, 1], 'recovery': [0, 1]}
 
     # generate bounds on state variables!

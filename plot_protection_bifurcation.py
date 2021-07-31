@@ -12,7 +12,7 @@ from get_data import get_data
 from plot_time_perturbed_steady_states import plot_time_perturbed_steady_state as plot_time_perturbed_steady_states
 
 # get a path associated to saving each figure
-path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
+path = r'C:\Users\antho\Documents\Projects\Infodemics\Code\figures'
 # change to a global variable
 
 # dpi changes resolution of figures

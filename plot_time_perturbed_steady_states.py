@@ -2,11 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import generate_ode
 import matplotlib as mpl
+from gen_sys import gen_sys
 
 from generate_ode import generate_ode
 from generate_pointset import generate_pointset
 
-path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
+path = r'C:\Users\antho\Documents\Projects\Infodemics\Code\figures'
 
 
 # dpi changes resolution of figures
@@ -124,19 +125,25 @@ def plot_time_perturbed_steady_state(PAR_dict=par_dict, ss_dict=ss_dict, tend=10
 
     # generate new initial conditions!
     for k, v in ss_dict.items():
-        sgn = np.sign(eps - 1 / 2)
-        ss_dict_perturbed[k] = np.round(v, 6) * (1 + sgn * eps0 * np.random.rand(1))  # perturb new steady state
+        sgn = np.sign(np.random.rand(1) - 1 / 2)[0]
+        ss_dict_perturbed[k] = np.round(v, 6) * (1 + sgn * eps0 * np.random.rand(1))[0]  # perturb new steady state
     # generate new system
-    ode = generate_ode(PAR_dict, ss_dict_perturbed, tf=tend)  # generate a pointset
+    """ode = generate_ode(PAR_dict, ss_dict_perturbed, tf=tend)  # generate a pointset
     pts = ode.compute('sample').sample(dt=1)
-
     # plot the variables
     t = pts['t']
     sg = pts['x1']
     sb = pts['x2']
     ib = pts['x3']
     v = pts['x4']
-    phi = pts['x5']
+    phi = pts['x5']"""
+
+    z, t = gen_sys(par_dict = par_dict, ics_dict = ss_dict_perturbed, tf = tend)
+    sg, sb, ib, v, phi = z.T
+
+    pts = {'t': t, 'x1': sg,
+           'x2': sb, 'x3': ib,
+           'x4': v, 'x5': phi}
 
     # auxillary
     bad = sb + ib
@@ -145,7 +152,7 @@ def plot_time_perturbed_steady_state(PAR_dict=par_dict, ss_dict=ss_dict, tend=10
     healthy = sg + sb + v
     ig = 1 - (sb + sg + ib + v)
 
-    # plottiing equations of state
+    # plotting equations of state
     plt.plot(t, sb, 'r', label=r'$S_B$', lw = 2)
     plt.plot(t, ib, 'r--', label=r'$I_B$', lw = 2)
     plt.plot(t, sg, 'b', label=r'$S_G$', lw = 2)
@@ -159,7 +166,7 @@ def plot_time_perturbed_steady_state(PAR_dict=par_dict, ss_dict=ss_dict, tend=10
     plt.savefig(path + file_name, dpi=300)
     plt.show()
 
-    plt.plot(t, infected, 'r', label=r'$I$')
+    """plt.plot(t, infected, 'r', label=r'$I$')
     plt.plot(t, healthy, 'b', label=r'$S + V$')
     plt.xlabel('t (Days)')
     plt.ylabel('Population')
@@ -172,7 +179,7 @@ def plot_time_perturbed_steady_state(PAR_dict=par_dict, ss_dict=ss_dict, tend=10
     plt.xlabel('t (Days)')
     plt.ylabel('Population')
     plt.legend()
-    plt.show()
+    plt.show()"""
 
     # plot the effective reproductive number
     reff_num = par_dict['infection_bad'] * sb + (1 - par_dict['protection']) * par_dict['infection_good'] * v

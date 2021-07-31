@@ -7,7 +7,7 @@ from generate_ode import generate_ode
 from generate_pointset import generate_pointset
 from sys_dx import sys_dx
 
-path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
+path = r'C:\Users\antho\Documents\Projects\Infodemics\Code\figures'
 
 
 # get dictionary corresponding to multiple parameters and initial conditions!

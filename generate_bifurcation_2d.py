@@ -84,7 +84,7 @@ eq2_h2_par = eq1_h1_par_dict
 eq2_h2_par['misinformation'] = 0.0660611192767927
 
 def generate_bifurcation_2d(PC, curve='EQ1', special_point='H2', xpar='misinformation', ypar='education',
-                            max_n_points=80, curve_type='H-C1', par_dict=eq2_h2_par, name_curve='HO2'):
+                            max_n_points=80, curve_type='H-C2', par_dict=eq2_h2_par, name_curve='HO2'):
     """
     funciton to generate a co-dimension two bifurcation given an initial starting point on the curve
     :param PC: PyCont generated from generate_bifurcation
@@ -167,9 +167,9 @@ def generate_bifurcation_2d(PC, curve='EQ1', special_point='H2', xpar='misinform
 
     # change the default settings for the numerical continuation
     PCargs.MaxNumPoints = max_n_points  # The following 3 parameters are set after trial-and-error
-    PCargs.MaxStepSize = 0.01
+    PCargs.MaxStepSize = 0.1
     PCargs.MinStepSize = 1e-5
-    PCargs.StepSize = 1e-4
+    PCargs.StepSize = 1e-3
     PCargs.LocBifPoints = 'all'  # detect limit points / saddle-node bifurcations / hopf bifurcations!
     PCargs.SaveEigen = True  # to tell unstable from stable branches
     PCargs.SaveJacobian = True  # saves the Jacobian data which can be used for the nullclines!
@@ -180,6 +180,11 @@ def generate_bifurcation_2d(PC, curve='EQ1', special_point='H2', xpar='misinform
 
     # continue backwards and forwards!
     PC[name_curve].forward()
+
+    # start at the initial point and generate a backwards continuation!
+    PCargs.initpoint = point_special
+    PCargs.StepSize = 1e-2
+    PC.update(PCargs)
     PC[name_curve].backward()
 
     # now we display the continuation curve with respect to the variables!
@@ -190,9 +195,21 @@ def generate_bifurcation_2d(PC, curve='EQ1', special_point='H2', xpar='misinform
     # disable the boundary
     PC.plot.toggleLabels(visible='off', bylabel=None, byname=None, bytype='P')
     PC.plot.toggleLabels(visible='off', bylabel=None, byname=None, bytype='B')
+
+    # get the data obtained in the figure!
+    lc_x = PC[name_curve].sol[xpar]
+    lc_y = PC[name_curve].sol[ypar]
+
+    # determine the limit cycle boundaries in x and y
+    print(np.size(lc_x))
+    print(np.size(lc_y))
+
+    plt.fill(lc_x, lc_y)
     plt.title('')  # no title
     plt.ylabel(ylab)
     plt.xlabel(xlab)
+    plt.xlim(np.min(lc_x) * 0.95, np.max(lc_x) * 1.05)
+    plt.ylim(np.min(lc_y) * 0.95, np.max(lc_y) * 1.05)
     plt.show()
 
     PC_2d = PC
