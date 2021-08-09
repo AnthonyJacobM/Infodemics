@@ -7,7 +7,7 @@ from generate_ode import generate_ode
 from generate_pointset import generate_pointset
 from sys_dx import sys_dx
 
-path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
+path = r'C:\Users\antho\Documents\Projects\Infodemics\Code\figures'
 
 
 # get dictionary corresponding to multiple parameters and initial conditions!
@@ -15,7 +15,8 @@ path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
 par_dict_def = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.10, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,
-            'infection_good': 0.048, 'infection_bad': 0.37}
+            'infection_good': 0.048, 'infection_bad': 0.37,
+                'ace': 0}
 
 # initialize initial conditions!
 # x1 ~ sg, x2 ~ sb, x3 ~ ib, x4 ~ v, x5 ~ phi
@@ -32,7 +33,8 @@ ss_bp_r = {'x1': 0.00057159126, 'x2': 0.18949223,
 par_bp_r = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.34021985, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,
-            'infection_good': 0.048, 'infection_bad': 0.37}
+            'infection_good': 0.048, 'infection_bad': 0.37,
+            'ace': 0}
 
 # steady states at hopf for the risk bifurcation!
 ss_hopf_r = {'x1': 0.107930, 'x2': 0.345919 ,
@@ -73,7 +75,8 @@ eq1_h1_par_dict['risk'] = 1.635295791362042
 par_hopf_r = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.387844, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,
-            'infection_good': 0.048, 'infection_bad': 0.37}
+            'infection_good': 0.048, 'infection_bad': 0.37,
+              'ace': 0}
 
 
 # this is the steady state value for misinormation starting from the hopf on the risk bifurcation
@@ -129,7 +132,6 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
     misinformation = par_dict['misinformation']
     education = par_dict['education']
     recovery = par_dict['recovery']
-
     """
        H Point found 
        ========================== 
@@ -282,6 +284,35 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
 
         # y null --> solve for x = x3
         y_null = (x5_ss * x1_ss) / ((1 - protection) * infection_good * y_array)
+
+    elif option == 'E':
+        # phi vs v
+        a = 5  # eigenvector component in x
+        b = 4  # eigenvector component in y
+
+        xlab = r'$\phi$'  # label for x axis
+        ylab = r'$V$'  # label for y axis
+
+        xnull_lab = r'$N_{\phi}$'  # label for legend
+        ynull_lab = r'$N_{V}$'
+
+        x_traj = x5_traj
+        y_traj = x4_traj
+
+        dx_x = 'x5'  # used for quiver
+        dx_y = 'x4'
+
+        x_ss = x5_ss  # steady state value on x
+        y_ss = x4_ss  # steady state value on y
+
+        x_array = np.linspace(xlow, xhigh, n_bin)
+        y_array = np.linspace(ylow, yhigh, n_bin)
+
+        # x null --> solve for y = x4
+        x_null = (ig_ss + x3_ss + a * ig_ss) / (risk - a * (1 - protection) * infection_good * x3_ss / x_array)
+
+        # y null --> solve for x = x5
+        y_null = (1 - protection) * x3_ss * x_array / x1_ss
 
     # generate a phase field
     if quiv_bool:

@@ -2,7 +2,8 @@
 par_dict_def = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.10, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,
-            'infection_good': 0.048, 'infection_bad': 0.37}
+            'infection_good': 0.048, 'infection_bad': 0.37,
+                'ace': 0}
 
 # initialize initial conditions!
 # x1 ~ sg, x2 ~ sb, x3 ~ ib, x4 ~ v, x5 ~ phi
@@ -19,7 +20,8 @@ ss_bp_r = {'x1': 0.00057159126, 'x2': 0.18949223,
 par_bp_r = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.34021985, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,
-            'infection_good': 0.048, 'infection_bad': 0.37}
+            'infection_good': 0.048, 'infection_bad': 0.37,
+            'ace': 0}
 
 # steady states at hopf for the risk bifurcation!
 ss_hopf_r = {'x1': 0.107930, 'x2': 0.345919 ,
@@ -60,7 +62,8 @@ eq1_h1_par_dict['risk'] = 1.635295791362042
 par_hopf_r = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.387844, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,
-            'infection_good': 0.048, 'infection_bad': 0.37}
+            'infection_good': 0.048, 'infection_bad': 0.37,
+              'ace': 0}
 
 
 # this is the steady state value for misinormation starting from the hopf on the risk bifurcation

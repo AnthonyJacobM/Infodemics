@@ -6,7 +6,7 @@ import pandas as pd
 import matplotlib as mpl
 from generate_ode import generate_ode
 from generate_pointset import generate_pointset
-from generate_risk_bifurcation import generate_risk_bifurcation
+from generate_a_bifurcation import generate_a_bifurcation
 from plot_nullclines import plot_nullclines
 from get_data import get_data
 from plot_time_perturbed_steady_states import plot_time_perturbed_steady_state as plot_time_perturbed_steady_states
@@ -33,7 +33,8 @@ mpl.rcParams['lines.linewidth'] = 2.0
 par_dict_def = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.10, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,
-            'infection_good': 0.048, 'infection_bad': 0.37, 'ace': 0}
+            'infection_good': 0.048, 'infection_bad': 0.37,
+                'ace': 0}
 
 # x1 ~ sg, x2 ~ sb, x3 ~ ib, x4 ~ v, x5 ~ phi
 ics_dict_def = {'x1': 0.30, 'x2': 0.55,
@@ -44,7 +45,8 @@ ics_dict_def = {'x1': 0.30, 'x2': 0.55,
 eq1_risk_lp1_par_dict = {'risk': 0.12952930209570576, 'protection': 0.90,
                          'recovery': 0.07, 'belief': 1.0,
                          'education': 0.33, 'misinformation': 0.10,
-                         'infection_good': 0.048, 'infection_bad': 0.37}
+                         'infection_good': 0.048, 'infection_bad': 0.37,
+                         'ace': 0}
 
 eq1_risk_lp1_ss = {'x1': 0.02179992969509327,
                    'x2': 0.21186033176092678,
@@ -70,7 +72,7 @@ eq1_h1_par_dict = par_dict_def
 eq1_h1_par_dict['risk'] = 1.635295791362042
 
 
-def plot_risk_bifurcation(par_dict = eq1_h1_par_dict, ics_dict = eq1_h1_ss, special_point = 'H1', tend = 5_000, eps0 = 0.15):
+def plot_a_bifurcation(par_dict = eq1_h1_par_dict, ics_dict = eq1_h1_ss, special_point = 'H1', tend = 5_000, eps0 = 0.15):
     """
     function to plot codim-1 bifurcation, nullclines, and perturbed time evolution
     :param par_dict: dictionary of parameters used to simulate the bifurcation
@@ -87,32 +89,28 @@ def plot_risk_bifurcation(par_dict = eq1_h1_par_dict, ics_dict = eq1_h1_ss, spec
     pts, ss_dict = generate_pointset(ode, save_bool = True)
 
 
-    # ------------- risk -------------------------
-    # generate risk bifurcation!
-    PC_risk = generate_risk_bifurcation(ode, ics_dict = ics_dict, par_dict = par_dict, tend = 300)
+    # ------------- a -------------------------
+    PC_a = generate_a_bifurcation(ode, ics_dict = ics_dict, par_dict = par_dict, tend = 300)
 
     # get the data
-    if special_point != 'BP1':
-        par_dict, ss_dict, data = get_data(PC_risk, curve = 'EQrisk', special_point = special_point, par_dict = par_dict, par = 'risk')
-    # use EQrisk2 and BP1 (see generate_risk_bifurcation) for more details!
-    else:
-        par_dict, ss_dict, data = get_data(PC_risk, curve='EQrisk2', special_point=special_point,
-                                           par_dict=par_dict, par='risk')
+    par_dict, ss_dict, data = get_data(PC_a, curve = 'EQace', special_point = special_point, par_dict = par_dict, par = 'ace')
 
     # generate a pointset and plot the time around the bifurcation!
-    pts = plot_time_perturbed_steady_states(PAR_dict = par_dict, ss_dict = ss_dict, tend = tend, par = 'risk', random_bool = True, eps = eps0)
+    pts = plot_time_perturbed_steady_states(PAR_dict = par_dict, ss_dict = ss_dict, tend = tend, par = 'ace', random_bool = True, eps = eps0)
 
 
     # plot a few nulllclines
     # sg vs sb nullcline
-    plot_nullclines(option = 'A', PTS = pts, par_dict = par_dict, ss_dict = ss_dict, evecs_bool = False, xhigh = 0.25, yhigh = 0.6, n_bin = 200, par = 'risk')
+    plot_nullclines(option = 'A', PTS = pts, par_dict = par_dict, ss_dict = ss_dict, evecs_bool = False, xhigh = 0.25, yhigh = 0.6, n_bin = 200, par = 'ace')
     # sb vs ib nullcline
-    plot_nullclines(option = 'B', PTS = pts, par_dict = par_dict, ss_dict = ss_dict, evecs_bool = False, xhigh = 0.50, yhigh = 0.5, n_bin = 200, par = 'risk')
+    plot_nullclines(option = 'B', PTS = pts, par_dict = par_dict, ss_dict = ss_dict, evecs_bool = False, xhigh = 0.50, yhigh = 0.5, n_bin = 200, par = 'ace')
     # ib vs v nullcline
-    plot_nullclines(option = 'C', PTS = pts, par_dict = par_dict, ss_dict = ss_dict, evecs_bool = False, xhigh = 0.25, yhigh = 0.75, n_bin = 200, par = 'risk')
+    plot_nullclines(option = 'C', PTS = pts, par_dict = par_dict, ss_dict = ss_dict, evecs_bool = False, xhigh = 0.25, yhigh = 0.75, n_bin = 200, par = 'ace')
+    # ib vs v nullcline
+    plot_nullclines(option='E', PTS=pts, par_dict=par_dict, ss_dict=ss_dict, evecs_bool=False, xhigh=1.0, yhigh=0.75,
+                    n_bin=200, par='ace')
 
-
-    return PC_risk, par_dict, ss_dict, data
+    return PC_a, par_dict, ss_dict, data
 
 
 
