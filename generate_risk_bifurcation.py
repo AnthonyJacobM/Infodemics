@@ -3,7 +3,7 @@ import PyDSTool as dst
 from PyDSTool import *
 from generate_ode import generate_ode
 
-path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
+path = r'C:\Users\antho\Documents\Projects\Infodemics\Code\figures'
 
 
 import matplotlib as mpl

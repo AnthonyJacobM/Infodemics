@@ -12,7 +12,7 @@ from get_data import get_data
 from plot_time_perturbed_steady_states import plot_time_perturbed_steady_state as plot_time_perturbed_steady_states
 
 # get a path associated to saving each figure
-path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
+path = r'C:\Users\antho\Documents\Projects\Infodemics\Code\figures'
 # change to a global variable
 
 # dpi changes resolution of figures
@@ -33,7 +33,7 @@ mpl.rcParams['lines.linewidth'] = 2.0
 par_dict_def = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.10, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,
-            'infection_good': 0.048, 'infection_bad': 0.37}
+            'infection_good': 0.048, 'infection_bad': 0.37, 'ace': 0}
 
 # x1 ~ sg, x2 ~ sb, x3 ~ ib, x4 ~ v, x5 ~ phi
 ics_dict_def = {'x1': 0.30, 'x2': 0.55,
