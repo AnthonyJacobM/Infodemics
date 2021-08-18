@@ -3,7 +3,7 @@ import PyDSTool as dst
 from PyDSTool import *
 from generate_ode import generate_ode
 
-path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
+path = r'C:\Users\antho\Documents\Projects\Infodemics\Code\figures'
 
 
 import matplotlib as mpl
@@ -177,9 +177,9 @@ def generate_recovery_bifurcation(ode, ics_dict = eq1_h1_ss, par_dict = eq1_h1_p
     PC['EQrisk2'].forward()"""
 
     # begin plotting
-    yvar_array = ['x4', 'x3', 'x2', 'x1']
-    ylab_array = [r'$V$', r'$I_B$', r'$S_B$', r'$S_G$']
-    col_array = ['b', 'r', 'k', 'orange']
+    yvar_array = ['x4', 'x3', 'x2', 'x1', 'x5']
+    ylab_array = [r'$V$', r'$I_B$', r'$S_B$', r'$S_G$', r'$\phi$']
+    col_array = ['g', 'r', 'r', 'b', 'k']
     for z, z0 in enumerate(yvar_array):
         # display the bifurcation!
         PC.display(['recovery', yvar_array[z]], stability=True, color=col_array[z])  # x variable vs y variable!

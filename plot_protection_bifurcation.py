@@ -12,7 +12,7 @@ from get_data import get_data
 from plot_time_perturbed_steady_states import plot_time_perturbed_steady_state as plot_time_perturbed_steady_states
 
 # get a path associated to saving each figure
-path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
+path = r'C:\Users\antho\Documents\Projects\Infodemics\Code\figures'
 # change to a global variable
 
 # dpi changes resolution of figures
@@ -32,7 +32,7 @@ mpl.rcParams['lines.linewidth'] = 2.0
 par_dict_def = {'recovery': 0.07, 'belief': 1.0,
                 'risk': 0.10, 'protection': 0.90,
                 'education': 0.33, 'misinformation': 0.10,
-                'infection_good': 0.048, 'infection_bad': 0.37}
+                'infection_good': 0.048, 'infection_bad': 0.37, 'ace': 0}
 
 # x1 ~ sg, x2 ~ sb, x3 ~ ib, x4 ~ v, x5 ~ phi
 ics_dict_def = {'x1': 0.30, 'x2': 0.55,
@@ -43,7 +43,7 @@ ics_dict_def = {'x1': 0.30, 'x2': 0.55,
 eq1_risk_lp1_par_dict = {'risk': 0.12952930209570576, 'protection': 0.90,
                          'recovery': 0.07, 'belief': 1.0,
                          'education': 0.33, 'misinformation': 0.10,
-                         'infection_good': 0.048, 'infection_bad': 0.37}
+                         'infection_good': 0.048, 'infection_bad': 0.37, 'ace': 0}
 
 eq1_risk_lp1_ss = {'x1': 0.02179992969509327,
                    'x2': 0.21186033176092678,
@@ -101,16 +101,52 @@ def plot_protection_bifurcation(par_dict=eq1_risk_lp1_par_dict, ics_dict=eq1_ris
 
     # plot a few nulllclines
     # sg vs sb nullcline
-    plot_nullclines(option='A', PTS=pts, par_dict=par_dict, ss_dict=ss_dict, evecs_bool=False, xhigh=0.25, yhigh=0.6,
+    plot_nullclines(option='A', PTS=pts, par_dict=par_dict, ss_dict=ss_dict, evecs_bool=False,
                     n_bin=200, par='protection')
     # sb vs ib nullcline
-    plot_nullclines(option='B', PTS=pts, par_dict=par_dict, ss_dict=ss_dict, evecs_bool=False, xhigh=0.50, yhigh=0.5,
+    plot_nullclines(option='B', PTS=pts, par_dict=par_dict, ss_dict=ss_dict, evecs_bool=False,
                     n_bin=200, par='protection')
     # ib vs v nullcline
-    plot_nullclines(option='C', PTS=pts, par_dict=par_dict, ss_dict=ss_dict, evecs_bool=False, xhigh=0.25, yhigh=0.75,
+    plot_nullclines(option='C', PTS=pts, par_dict=par_dict, ss_dict=ss_dict, evecs_bool=False,
                     n_bin=200, par='protection')
+
 
     return PC_protection, par_dict, ss_dict, data
 
 
+def sample(eigs_bool = False):
+    """
+    test function to plot bifurcations
+    :param eigs_bool: boolean to plot the eigenvalues
+    :return: plotted bifurcations
+    """
+    PC, par_dict, ss_dict, data = plot_protection_bifurcation(par_dict=eq1_risk_lp1_par_dict, ics_dict=eq1_risk_lp1_ss,
+                                                             special_point='LP1', tend=20_000, eps0=0.05)
 
+    # plotting the bifurcation
+    if eigs_bool == True:
+        risk_bin = PC['EQprotection'].sol['protection']
+        evals_risk = [PC['EQprotection'].sol[z].labels['EP']['data'].evals for z in range(len(PC['EQprotection'].sol))]
+        evecs_risk = [PC['EQprotection'].sol[z].labels['EP']['data'].evecs for z in range(len(PC['EQprotection'].sol))]
+        stab_risk = [PC['EQprotection'].sol[z].labels['EP']['stab'] for z in range(len(PC['EQprotection'].sol))]
+        par_risk = PC['EQprotection'].sol['protection']
+        evals_risk_max = [np.max(np.real(evals_risk[z][:])) for z in range(len(evals_risk))]
+        evals_risk_idx = [np.argmax(np.real(evals_risk[z][:])) for z in range(len(evals_risk))]
+        evals_risk_imag = np.imag(evals_risk)
+
+        plt.plot(risk_bin, evals_risk_max, 'k')
+        plt.xlabel('r', fontsize=18)
+        plt.ylabel(r'$\mathbb{R}(\lambda)$', fontsize=18)
+        plt.show()
+
+        plt.plot(risk_bin, np.max(evals_risk_imag), 'b')
+        plt.plot(risk_bin, np.min(evals_risk_imag), 'b')
+        plt.xlabel('r', fontsize=18)
+        plt.ylabel(r'$\mathbb{C}(\lambda)$', fontsize=18)
+        plt.show()
+
+    plot_protection_bifurcation(par_dict=eq1_h1_par_dict, ics_dict=eq1_h1_ss, special_point='LP1', tend=10_000, eps0=0.05)
+
+
+
+sample()
