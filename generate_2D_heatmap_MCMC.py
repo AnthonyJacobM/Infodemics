@@ -452,23 +452,219 @@ def generate_2D_heatmap(mc_z = 10, epsilon  = 0.01, n0 = 11, tend = 10_000, zvar
 
     if save_bool == True:
         # save the data -
-        np.savetxt(f"inf_peak_{x_par}_{y_par}_new_.txt", inf_peak_bin, delimiter=',')
-        np.savetxt(f"bad_peak_{x_par}_{y_par}_new_.txt", bad_peak_bin, delimiter=',')
-        np.savetxt(f"vac_peak_{x_par}_{y_par}_new_.txt", vac_peak_bin, delimiter=',')
-        np.savetxt(f"period_{x_par}_{y_par}_new_.txt", period_bin, delimiter=',')
-        np.savetxt(f"x_bin_{x_par}_{y_par}_new_.txt", x_bin, delimiter = ',')
-        np.savetxt(f"y_bin_{x_par}_{y_par}_new_.txt", y_bin, delimiter = ',')
+        np.savetxt(f"inf_peak_{x_par}_{y_par}_data.txt", inf_peak_bin, delimiter=',')
+        np.savetxt(f"bad_peak_{x_par}_{y_par}_data.txt", bad_peak_bin, delimiter=',')
+        np.savetxt(f"vac_peak_{x_par}_{y_par}_data.txt", vac_peak_bin, delimiter=',')
+        np.savetxt(f"period_{x_par}_{y_par}_data.txt", period_bin, delimiter=',')
+        np.savetxt(f"x_bin_{x_par}_{y_par}_data.txt", x_bin, delimiter = ',')
+        np.savetxt(f"y_bin_{x_par}_{y_par}_data.txt", y_bin, delimiter = ',')
 
 
 
 
-
+# these heatmaps are already generated...
 generate_2D_heatmap(mc_z = 10, epsilon  = 0.01, n0 = 101, tend = 10_000, zvar = 'inf', x_low = 0, x_high = 2.5, y_low = 0, y_high = 0.50, x_par = 'risk', y_par = 'misinformation', save_bool = True)
 generate_2D_heatmap(mc_z = 10, epsilon  = 0.01, n0 = 101, tend = 10_000, zvar = 'inf', x_low = 0, x_high = 0.4, y_low = 0, y_high = 0.50, x_par = 'education', y_par = 'misinformation', save_bool = True)
-generate_2D_heatmap(mc_z = 10, epsilon  = 0.01, n0 = 101, tend = 10_000, zvar = 'inf', x_low = 0, x_high = 0.4, y_low = 0, y_high = 0.50, x_par = 'protection', y_par = 'misinformation', save_bool = True)
+generate_2D_heatmap(mc_z = 10, epsilon  = 0.01, n0 = 101, tend = 10_000, zvar = 'inf', x_low = 0.5, x_high = 1, y_low = 0, y_high = 0.50, x_par = 'protection', y_par = 'misinformation', save_bool = True)
 
 
-generate_2D_heatmap(mc_z = 10, epsilon  = 0.01, n0 = 101, tend = 10_000, zvar = 'inf', x_low = 0, x_high = 2.5, y_low = 0, y_high = 0.40, x_par = 'risk', y_par = 'education', save_bool = True)
-generate_2D_heatmap(mc_z = 10, epsilon  = 0.01, n0 = 101, tend = 10_000, zvar = 'inf', x_low = 0.5, x_high = 1.0, y_low = 0, y_high = 0.40, x_par = 'protection', y_par = 'education', save_bool = True)
+# the three heatmaps below need to be generated...
+#generate_2D_heatmap(mc_z = 10, epsilon  = 0.01, n0 = 101, tend = 10_000, zvar = 'inf', x_low = 0, x_high = 2.5, y_low = 0, y_high = 0.40, x_par = 'risk', y_par = 'education', save_bool = True)
+#generate_2D_heatmap(mc_z = 10, epsilon  = 0.01, n0 = 101, tend = 10_000, zvar = 'inf', x_low = 0.5, x_high = 1.0, y_low = 0, y_high = 0.40, x_par = 'protection', y_par = 'education', save_bool = True)
+#generate_2D_heatmap(mc_z = 10, epsilon  = 0.01, n0 = 101, tend = 10_000, zvar = 'inf', x_low = 0, x_high = 2.5, y_low = 0.50, y_high = 1, x_par = 'risk', y_par = 'protection', save_bool = True)
 
-generate_2D_heatmap(mc_z = 10, epsilon  = 0.01, n0 = 101, tend = 10_000, zvar = 'inf', x_low = 0, x_high = 2.5, y_low = 0.50, y_high = 1, x_par = 'risk', y_par = 'protection', save_bool = True)
+
+
+
+# define functions to plot the data
+def plot_heatmap_1():
+    """
+    function to plot the heatmap of education versus misinformation
+    :return: plot heatmaps
+    """
+    file_bad = r'C:\Users\antho\Documents\Projects\Infodemics\Code\bad_peak_risk_misinformation_data.txt'
+    file_inf = r'C:\Users\antho\Documents\Projects\Infodemics\Code\inf_peak_risk_misinformation_data.txt'
+    file_vac = r'C:\Users\antho\Documents\Projects\Infodemics\Code\vac_peak_risk_misinformation_data.txt'
+    file_period = r'C:\Users\antho\Documents\Projects\Infodemics\Code\period_risk_misinformation_data.txt'
+
+    from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+    # load the data
+    array = np.loadtxt(file_inf, delimiter=',', dtype=float)
+
+    # rehape the array
+    array_new = array.reshape(len(array), 1)
+
+    # get the length of the array
+    z = len(array_new)
+
+    # get the size of the array by finding the sqrt of the total number of elements of the array
+    nsize = int(np.sqrt(z))
+
+    # number of elements to truncate is the size of the array minus nsize^2
+    ntruncate = z - nsize
+
+    # truncate the array and determine the total number of elements in the array:
+    array_final = array_new[0:nsize * nsize]
+
+    # now, reshape the data:
+    data = array_final.reshape(nsize, nsize)
+
+    # get the parameter arrays that are the same for the idx of the new array
+    # parameter arrays used for the simulation
+    misinformation_x = np.linspace(0, 0.50, 11)
+    risk_y = np.linspace(0, 2.5 * 2, 11)
+    education_y = np.linspace(0, 0.40 * 2, 11)
+    delta_y = np.linspace(0.5, 1.0 * 2, 11)
+
+    for i in range(len(risk_y)):
+        risk_y[i] = np.round(risk_y[i], 3)
+        misinformation_x[i] = np.round(misinformation_x[i], 3)
+        education_y[i] = np.round(education_y[i], 3)
+        delta_y[i] = np.round(delta_y[i], 3)
+
+    # now we can plot the heatmap
+    # generate the figure and axes of the heatmap
+    fig, ax = plt.subplots(1, 1)
+
+    # now we plot the heatmaps
+    im = ax.imshow(data, cmap='RdBu_r')
+    plt.xlabel(r'$r$', fontsize=18)
+    plt.ylabel(r'$\mu$', fontsize=18)
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="8.5%", pad=0.3)
+    cb = plt.colorbar(im, cax=cax)
+    cb.set_label('$Vaccinated$', fontsize=18)
+    ax.set_xticklabels(risk_y)
+    ax.set_yticklabels(misinformation_x[::-1])
+    plt.show()
+    plt.close(fig)
+    plt.show()
+
+def plot_heatmap_2():
+    """
+    function to plot the heatmap of risk versus misinformation
+    :return:
+    """
+    file_bad = r'C:\Users\antho\Documents\Projects\Infodemics\Code\bad_peak_risk_misinformation_data.txt'
+    file_inf = r'C:\Users\antho\Documents\Projects\Infodemics\Code\inf_peak_risk_misinformation_data.txt'
+    file_vac = r'C:\Users\antho\Documents\Projects\Infodemics\Code\vac_peak_risk_misinformation_data.txt'
+    file_period = r'C:\Users\antho\Documents\Projects\Infodemics\Code\period_risk_misinformation_data.txt'
+
+    from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+    # load the data
+    array = np.loadtxt(file_inf, delimiter=',', dtype=float)
+
+    # rehape the array
+    array_new = array.reshape(len(array), 1)
+
+    # get the length of the array
+    z = len(array_new)
+
+    # get the size of the array by finding the sqrt of the total number of elements of the array
+    nsize = int(np.sqrt(z))
+
+    # number of elements to truncate is the size of the array minus nsize^2
+    ntruncate = z - nsize
+
+    # truncate the array and determine the total number of elements in the array:
+    array_final = array_new[0:nsize * nsize]
+
+    # now, reshape the data:
+    data = array_final.reshape(nsize, nsize)
+
+    # get the parameter arrays that are the same for the idx of the new array
+    # parameter arrays used for the simulation
+    misinformation_x = np.linspace(0, 0.50, 11)
+    risk_y = np.linspace(0, 2.5 * 2, 11)
+    education_y = np.linspace(0, 0.40 * 2, 11)
+    delta_y = np.linspace(0.5, 1.0 * 2, 11)
+
+    for i in range(len(risk_y)):
+        risk_y[i] = np.round(risk_y[i], 3)
+        misinformation_x[i] = np.round(misinformation_x[i], 3)
+        education_y[i] = np.round(education_y[i], 3)
+        delta_y[i] = np.round(delta_y[i], 3)
+
+    # now we can plot the heatmap
+    # generate the figure and axes of the heatmap
+    fig, ax = plt.subplots(1, 1)
+
+    # now we plot the heatmaps
+    im = ax.imshow(data, cmap='RdBu_r')
+    plt.xlabel(r'$r$', fontsize=18)
+    plt.ylabel(r'$\mu$', fontsize=18)
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="8.5%", pad=0.3)
+    cb = plt.colorbar(im, cax=cax)
+    cb.set_label('$Vaccinated$', fontsize=18)
+    ax.set_xticklabels(risk_y)
+    ax.set_yticklabels(misinformation_x[::-1])
+    plt.show()
+    plt.close(fig)
+    plt.show()
+
+def plot_heatmap_3():
+    """
+    function to plot the heatmap of delta vs misinformation
+    :return:
+    """
+    file_bad = r'C:\Users\antho\Documents\Projects\Infodemics\Code\bad_peak_protection_misinformation_data.txt'
+    file_inf = r'C:\Users\antho\Documents\Projects\Infodemics\Code\inf_peak_protection_misinformation_data.txt'
+    file_vac = r'C:\Users\antho\Documents\Projects\Infodemics\Code\vac_peak_protection_misinformation_data.txt'
+    file_period = r'C:\Users\antho\Documents\Projects\Infodemics\Code\period_protection_misinformation_data.txt'
+
+    from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+    # load the data
+    array = np.loadtxt(file_period, delimiter=',', dtype=float)
+
+    # rehape the array
+    array_new = array.reshape(len(array), 1)
+
+    # get the length of the array
+    z = len(array_new)
+
+    # get the size of the array by finding the sqrt of the total number of elements of the array
+    nsize = int(np.sqrt(z))
+
+    # number of elements to truncate is the size of the array minus nsize^2
+    ntruncate = z - nsize
+
+    # truncate the array and determine the total number of elements in the array
+    array_final = array_new[0:nsize * nsize]
+
+    # now, reshape the data
+    data = array_final.reshape(nsize, nsize)
+
+    # get the parameter arrays that are the same for the idx of the new array
+    # parameter arrays used for the simulation
+    misinformation_x = np.linspace(0, 0.50, 11)
+    risk_y = np.linspace(0, 2.5 * 2, 11)
+    education_y = np.linspace(0, 0.40 * 2, 11)
+    delta_y = np.linspace(0.5, 1.0 * 1, 11)
+
+    for i in range(len(risk_y)):
+        risk_y[i] = np.round(risk_y[i], 3)
+        misinformation_x[i] = np.round(misinformation_x[i], 3)
+        education_y[i] = np.round(education_y[i], 3)
+        delta_y[i] = np.round(delta_y[i], 3)
+
+    # now we can plot the heatmap
+    # generate the figure and axes of the heatmap
+    fig, ax = plt.subplots(1, 1)
+
+    # now we plot the heatmaps
+    im = ax.imshow(data, cmap='RdBu_r')
+    plt.xlabel(r'$\delta$', fontsize=18)
+    plt.ylabel(r'$\mu$', fontsize=18)
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="8.5%", pad=0.3)
+    cb = plt.colorbar(im, cax=cax)
+    cb.set_label('$Period$', fontsize=18)
+    ax.set_xticklabels(delta_y)
+    ax.set_yticklabels(misinformation_x[::-1])
+    plt.show()
+    plt.close(fig)
+    plt.show()
