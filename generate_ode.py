@@ -10,7 +10,8 @@ tend = 10_000
 par_dict_def = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.10, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,
-            'infection_good': 0.048, 'infection_bad': 0.37}
+            'infection_good': 0.048, 'infection_bad': 0.37,
+                'ace': 0}
 
 # initialize initial conditions!
 # x1 ~ sg, x2 ~ sb, x3 ~ ib, x4 ~ v, x5 ~ phi
@@ -27,7 +28,7 @@ ss_bp_r = {'x1': 0.00057159126, 'x2': 0.18949223,
 par_bp_r = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.34021985, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,
-            'infection_good': 0.048, 'infection_bad': 0.37}
+            'infection_good': 0.048, 'infection_bad': 0.37, 'ace': 0}
 
 # steady states at hopf for the risk bifurcation!
 ss_hopf_r = {'x1': 0.107930, 'x2': 0.345919 ,
@@ -68,7 +69,8 @@ eq1_h1_par_dict['risk'] = 1.635295791362042
 par_hopf_r = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.387844, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,
-            'infection_good': 0.048, 'infection_bad': 0.37}
+            'infection_good': 0.048, 'infection_bad': 0.37,
+              'ace': 0}
 
 
 # this is the steady state value for misinormation starting from the hopf on the risk bifurcation
@@ -104,9 +106,10 @@ def generate_ode(par_dict = par_dict_def, ics_dict = ics_dict_def, tf = tend):
     misinformation = Par(par_dict['misinformation'], 'misinformation')
     infection_good = Par(par_dict['infection_good'], 'infection_good')
     infection_bad = Par(par_dict['infection_bad'], 'infection_bad')
+    ace = Par(par_dict['ace'], 'ace')
 
     DSargs.pars = [recovery, belief, risk, protection, education,
-                   misinformation, infection_good, infection_bad]
+                   misinformation, infection_good, infection_bad, ace]
 
     # generate state variables!
     x1 = Var('x1') # sg
@@ -124,8 +127,9 @@ def generate_ode(par_dict = par_dict_def, ics_dict = ics_dict_def, tf = tend):
     # generate bounds on parameters!
     DSargs.pdomain = {'education': [0, 1], 'misinformation': [0, 1],
                       'infection_bad': [0, 1], 'infection_ bad': [0, 1],
-                      'protection': [0, 1], 'risk': [0, 5],
-                      'belief': [0, 1], 'recovery': [0, 1]}
+                      'protection': [0, 1], 'risk': [0, 6],
+                      'belief': [0, 1], 'recovery': [0, 1],
+                      'ace': [0, 5]}
 
     # generate bounds on state variables!
     DSargs.xdomain = {'x1': [0, 1], 'x2': [0, 1],
@@ -137,7 +141,7 @@ def generate_ode(par_dict = par_dict_def, ics_dict = ics_dict_def, tf = tend):
     x2rhs = misinformation * x1 * (x2 + x3) - x3 * (infection_bad * x2 - recovery)
     x3rhs = x3 * (infection_bad * x2 - recovery - education * (x1 + (1 - x1 - x2 - x3 - x4)) + (1 - protection) * infection_good * x4)
     x4rhs = x5 * x1 - (1 - protection) * infection_good * x4 * x3
-    x5rhs = belief * x5 * (1 - x5) * (x3 + (1 - x1 - x2 - x3 - x4) - risk * x4)
+    x5rhs = belief * x5 * (1 - x5) * (ace * (1 - x2 - x3 - x4) + (1 - x1 - x2 - x4) - risk * x4)
 
     DSargs.varspecs = {'x1': x1rhs, 'x2': x2rhs,
                        'x3': x3rhs, 'x4': x4rhs,
@@ -154,3 +158,4 @@ def generate_ode(par_dict = par_dict_def, ics_dict = ics_dict_def, tf = tend):
     ode = dst.Vode_ODEsystem(DSargs)
 
     return ode
+

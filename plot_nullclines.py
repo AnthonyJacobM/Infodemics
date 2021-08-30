@@ -4,10 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import numpy as np
 from generate_ode import generate_ode
-from generate_pointset import generate_pointset
 from sys_dx import sys_dx
 
-path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
+path = r'C:\Users\antho\Documents\Projects\Infodemics\Code\figures'
 
 
 # get dictionary corresponding to multiple parameters and initial conditions!
@@ -15,7 +14,8 @@ path = r'D:\Users\antho\PycharmProjects\Infodemics\figures'
 par_dict_def = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.10, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,
-            'infection_good': 0.048, 'infection_bad': 0.37}
+            'infection_good': 0.048, 'infection_bad': 0.37,
+                'ace': 0}
 
 # initialize initial conditions!
 # x1 ~ sg, x2 ~ sb, x3 ~ ib, x4 ~ v, x5 ~ phi
@@ -32,7 +32,8 @@ ss_bp_r = {'x1': 0.00057159126, 'x2': 0.18949223,
 par_bp_r = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.34021985, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,
-            'infection_good': 0.048, 'infection_bad': 0.37}
+            'infection_good': 0.048, 'infection_bad': 0.37,
+            'ace': 0}
 
 # steady states at hopf for the risk bifurcation!
 ss_hopf_r = {'x1': 0.107930, 'x2': 0.345919 ,
@@ -73,7 +74,8 @@ eq1_h1_par_dict['risk'] = 1.635295791362042
 par_hopf_r = {'recovery': 0.07, 'belief': 1.0,
             'risk': 0.387844, 'protection': 0.90,
             'education': 0.33, 'misinformation': 0.10,
-            'infection_good': 0.048, 'infection_bad': 0.37}
+            'infection_good': 0.048, 'infection_bad': 0.37,
+              'ace': 0}
 
 
 # this is the steady state value for misinormation starting from the hopf on the risk bifurcation
@@ -88,9 +90,9 @@ eq2_h2_par = eq1_h1_par_dict
 eq2_h2_par['misinformation'] = 0.0660611192767927
 
 
-def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1_ss, n_bin=100, xlow=0, xhigh=1.0,
-                        ylow=0, yhigh=1.0, quiv_bool=True, ext_bool=False, ss_dict_2=eq1_lp1_ss,
-                        par_dict_2=eq1_lp1_par_dict, evecs_bool=False, evecs=None, ics_dict={}, par = 'risk'):
+def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1_ss, n_bin=500, xlow=None, xhigh=None,
+                        ylow=None, yhigh=None, quiv_bool=True, w0 = 0, distance = 0.15, z0 = 0,
+                        evecs_bool=False, evecs=None, ics_dict={}, par = 'risk', seq = '', title_bool = False, title = ''):
     """
     function to generate nullclines with a quiver plot field determined using sys_dx function
     :param option: 'A' for SG vs IB, 'B' for SB vs IB, 'C' for IB vs V
@@ -103,9 +105,6 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
     :param ylow: lower bound on y variable
     :param yhigh: upper bound on y variable
     :param quiv_bool: boolean for the quiver plot of the nullcline
-    :param ext_bool: boolean to extend the current nullcline to include a second fixed point
-    :param ss_dict_2: second dictionary for steady state values
-    :param par_dict_2: second dictionary for parameter values
     :param evecs_bool: boolean for the eigenvectors used to determine the trajectory of the plane
     :param evecs: user supplied eigenvectors to determine the flow about the fised point
     :param ics_dict: dictionary containing initial conditions
@@ -130,17 +129,9 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
     education = par_dict['education']
     recovery = par_dict['recovery']
 
-    """
-       H Point found 
-       ========================== 
-       0 : 
-       x1  =  0.20993799300477495
-       x2  =  0.48221092545757344
-       x3  =  0.07073195797121161
-       x4  =  0.1168184171123022
-       x5  =  0.00018891967673741587
-       risk  =  1.6352957791039242
-       """
+
+
+
 
     if ics_dict == {}:
         x1_0 = 0.20
@@ -166,6 +157,8 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
     x5_traj = pts['x5']
     t = pts['t']
 
+
+
     # determine the functions of nullclines
     if option == 'A' or option == '':
         # sg vs sb
@@ -178,8 +171,8 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
         xnull_lab = r'$N_{S_G}$'  # label for legend
         ynull_lab = r'$N_{S_B}$'
 
-        x_traj = x1_traj
-        y_traj = x2_traj
+        x_traj = x1_traj[w0:]
+        y_traj = x2_traj[w0:]
 
         dx_x = 'x1'  # used for quiver
         dx_y = 'x2'
@@ -187,6 +180,17 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
         x_ss = x1_ss  # steady state value on x
         y_ss = x2_ss  # steady state value on y
 
+        # generate limits on the boundaries of the plot
+        if xlow == None:
+            xlow = (1 - distance) * np.min(x_traj)
+        if xhigh == None:
+            xhigh = (1 + distance) * np.max(x_traj)
+        if ylow == None:
+            ylow = (1 - distance) * np.min(y_traj)
+        if yhigh == None:
+            yhigh = (1 + distance) * np.max(y_traj)
+
+        # generate arrays
         x_array = np.linspace(xlow, xhigh, n_bin)
         y_array = np.linspace(ylow, yhigh, n_bin)
 
@@ -207,11 +211,21 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
         xnull_lab = r'$N_{S_B}$'  # label for legend
         ynull_lab = r'$N_{I_B}$'
 
-        x_traj = x2_traj
-        y_traj = x3_traj
+        x_traj = x2_traj[w0:]
+        y_traj = x3_traj[w0:]
 
         dx_x = 'x2'  # used for quiver
         dx_y = 'x3'
+
+        # generate limits on the boundaries of the plot
+        if xlow == None:
+            xlow = (1 - distance) * np.min(x_traj)
+        if xhigh == None:
+            xhigh = (1 + distance) * np.max(x_traj)
+        if ylow == None:
+            ylow = (1 - distance) * np.min(y_traj)
+        if yhigh == None:
+            yhigh = (1 + distance) * np.max(y_traj)
 
         x_ss = x2_ss  # steady state value on x
         y_ss = x3_ss  # steady state value on y
@@ -235,8 +249,18 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
         xnull_lab = r'$N_{I_B}$'  # label for legend
         ynull_lab = r'$N_{V}$'
 
-        x_traj = x3_traj
-        y_traj = x4_traj
+        x_traj = x3_traj[w0:]
+        y_traj = x4_traj[w0:]
+
+        # generate limits on the boundaries of the plot
+        if xlow == None:
+            xlow = (1 - distance) * np.min(x_traj)
+        if xhigh == None:
+            xhigh = (1 + distance) * np.max(x_traj)
+        if ylow == None:
+            ylow = (1 - distance) * np.min(y_traj)
+        if yhigh == None:
+            yhigh = (1 + distance) * np.max(y_traj)
 
         dx_x = 'x3'  # used for quiver
         dx_y = 'x4'
@@ -267,6 +291,16 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
         x_traj = 1 - (x1_traj + x2_traj + x3_traj)
         y_traj = x4_traj
 
+        # generate limits on the boundaries of the plot
+        if xlow == None:
+            xlow = 0.95 * np.min(x_traj)
+        if xhigh == None:
+            xhigh = 1.05 * np.max(x_traj)
+        if ylow == None:
+            ylow = 0.95 * np.min(y_traj)
+        if yhigh == None:
+            yhigh = 1.05 * np.max(y_traj)
+
         dx_x = 'x3'  # used for quiver
         dx_y = 'x4'
 
@@ -283,20 +317,65 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
         # y null --> solve for x = x3
         y_null = (x5_ss * x1_ss) / ((1 - protection) * infection_good * y_array)
 
+    elif option == 'E':
+        # phi vs v
+        a = 5  # eigenvector component in x
+        b = 4  # eigenvector component in y
+
+        xlab = r'$\phi$'  # label for x axis
+        ylab = r'$V$'  # label for y axis
+
+        xnull_lab = r'$N_{\phi}$'  # label for legend
+        ynull_lab = r'$N_{V}$'
+
+        x_traj = x3_traj[w0:]
+        y_traj = x4_traj[w0:]
+
+        # generate limits on the boundaries of the plot
+        if xlow == None:
+            xlow = (1 - distance) * np.min(x_traj)
+        if xhigh == None:
+            xhigh = (1 + distance) * np.max(x_traj)
+        if ylow == None:
+            ylow = (1 - distance) * np.min(y_traj)
+        if yhigh == None:
+            yhigh = (1 + distance) * np.max(y_traj)
+
+        dx_x = 'x5'  # used for quiver
+        dx_y = 'x4'
+
+        x_ss = x5_ss  # steady state value on x
+        y_ss = x4_ss  # steady state value on y
+
+        x_array = np.linspace(xlow, xhigh, n_bin)
+        y_array = np.linspace(ylow, yhigh, n_bin)
+
+        # x null --> solve for y = x4
+        x_null = (ig_ss + x3_ss + a * ig_ss) / (risk - a * (1 - protection) * infection_good * x3_ss / x_array)
+
+        # y null --> solve for x = x5
+        y_null = (1 - protection) * x3_ss * x_array / x1_ss
+
+    # generate a phase field
     # generate a phase field
     if quiv_bool:
         x, y = np.linspace(xlow, xhigh, 15), np.linspace(ylow, yhigh, 15)
         x1, y1 = np.meshgrid(x, y)
         dx1, dy1 = sys_dx([x1, y1, x1, y1, x1, y1], par_dict=par_dict, ss_dict=ss_dict, xvar=dx_x, yvar=dx_y)
         # normalize growth rate!
+        dx = dx1 / np.sqrt(dx1 ** 2 + dy1 ** 2);
+        dy = dy1 / np.sqrt(dx1 ** 2 + dy1 ** 2);
         M = (np.hypot(dx1, dy1))
         M[M == 0] = 1  # avoid division of zero
-        dx1 /= M
-        dy1 /= M  # normalize arrows
+        dx /= M
+        dy /= M  # normalize arrows
 
-        plt.quiver(x, y, dx1, dy1, M, pivot='mid')
+        plt.quiver(x, y, dx1, dy1, M, pivot='mid', cmap='RdBu')
 
-    z = int(len(x1_traj) / 4)
+    if z0 == '':
+        z = int(len(x1_traj) / 4)
+    else:
+        z = 0
     plt.plot(x_array, x_null, 'b', label=xnull_lab)
     plt.plot(y_null, y_array, 'r', label=ynull_lab)
 
@@ -322,23 +401,17 @@ def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1
         plt.arrow(x_ss, y_ss, v1[0], v1[1], color='b', ls='--')
         plt.arrow(x_ss, y_ss, v2[0], v2[1], color='r', ls='--')
 
-    plt.xlabel(xlab)
-    plt.ylabel(ylab)
+    plt.xlabel(xlab, fontsize = 18)
+    plt.ylabel(ylab, fontsize = 18)
+    plt.plot(x_traj[0:], y_traj[0:], 'k')
     plt.xlim([xlow, xhigh])
     plt.ylim([ylow, yhigh])
-    plt.plot(x_traj[0:], y_traj[0:], 'k')
     plt.legend()
-    file_name = f"\{par}_{dx_x}_{dx_y}_nullcline.jpeg"
-    plt.savefig(path + file_name, dpi = 300)
+    if seq == '':
+        file_name = f"\{par}_{dx_x}_{dx_y}_nullcline.jpeg"
+    else:
+        file_name = f"\{par}_{dx_x}_{dx_y}_nullcline_{seq}.jpeg"
+    plt.savefig(path + file_name, dpi=100)
+    if title_bool == True:
+        plt.title(title, fontsize = 18)
     plt.show()
-
-    # time plot
-    """plt.plot(t, x1_traj, 'b-', label='$S_G$')
-    plt.plot(t, x2_traj, 'r--', label='$S_B$')
-    plt.plot(t, x3_traj, 'r', label='$I_B$')
-    plt.plot(t, x4_traj, 'b:', label='$V$')
-    plt.plot(t, x5_traj, 'm:', label='$\phi$')
-    plt.legend()
-    plt.xlabel('t (Days)')
-    plt.ylabel('Fraction of the Population')
-    plt.show()"""
