@@ -1,0 +1,192 @@
+# This is a short description of each function for aux_fcn.py file in the infodemics project.
+def generate_ode(par_d = par_dict_def, ics_d = ics_dict_def, tend = 1000, rev_bool = False)
+    """
+    function to generate an ode for the infodemics model
+    :param p_d: dictionary of parameters
+    :param i_d: dictionary of initial conditions
+    :param tend: final time of numerical simisinformationlation
+    :param rev_bool: boolean for the revised version of the model (short term == True)
+    :return: ode
+    """
+
+def gen_sys(par_dict = par_dict_def, ics_dict = ics_dict_def, tf = tend, rev_bool = True):
+    """
+    function to generate a system used for integration
+    :param par_dict: dictionary for parameters
+    :param ics_dict: dicitonary for initial conditions
+    :param tf: final time
+    :return: the solution
+    """
+
+def export_data_to_excel(data = None, path = r'C:\Users\antho\Documents\Projects\Infodemics\Code\data', file_name = 'excel_test', sheets = ['StateVariables', 'Parameters']):
+    """
+    function to export the data to an excel file
+    :param data: contains the data for the state variables and the parameter values as two dictionaries for default
+    :param path: the path that will be used for the export of the data
+    :param file_name: name of the file that will be saved in the excel export
+    :return: .xslx file in the data
+    """
+
+def generate_1d_bifurcation(par = 'risk', par_d = par_dict_def, ics_d = ics_dict_def, tend = 10_000, type = 'EP-C', max_step = 0.1, min_step = 1e-5, step_size = 1e-2, max_points = 250, forward_bool = True, backward_bool = True, rev_bool = False):
+    """
+    function to generate a 1 dimension bifurcation...
+    :param par: parameter used for bifurcation: risk, protection, infection_good, infection_bad, misinformation, education, recovery
+    :param par_d: dictionary for parameters used for time simisinformationlation and initialization
+    :param ics_d: dictionary for initial conditions for the time simisinformationlation
+    :param tend: final time of simisinformationlation
+    :param type: LP-C, FP-C, etc.
+    :param max_step: largest step size of bifurcation
+    :param min_step: smallest step size of bifurcation
+    :param step_size: size of the step for the bifurcation
+    :param max_points: total number of points max for the bifurcation
+    :param forward_bool: Boolean to compute forward
+    :param backward_bool: Boolean to compute backward
+    :param rev_bool: boolean for the revised model (short term == True)
+    :return: PC -- continuation curve for the bifurcation analysis
+    """
+
+def sys_dx(X, t = 0, par_dict = par_dict_def, ss_dict = ics_dict_def, xvar = 'x1', yvar  = 'x3', rev_bool = True):
+    """
+    function to generate the phase field of the state varialbes and parameters
+    :param X: 5 dimensional array
+    :param t: time
+    :param par_dict: dicitonary of parameters
+    :param ss_dict: dictioanry of steady state variables
+    :param xvar: x variable for the phase space
+    :param yvar: y variable for the phase space
+    :param rev_bool: Boolean for the short term revised model
+    :return: Z, the array of the data
+    """
+
+def plot_nullclines(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1_ss, n_bin=500, xlow=None, xhigh=None,
+                        ylow=None, yhigh=None, quiv_bool=True, w0 = 0, distance = 0.15, z0 = 0,
+                        evecs_bool=False, evecs=None, ics_dict={}, par = 'risk', seq = '', title_bool = False, title = ''):
+    """
+    function to generate nullclines with a quiver plot field determined using sys_dx function
+    :param option: 'A' for SG vs SB, 'B' for SB vs IB, 'C' for IB vs V
+    :param PTS: pointset, if '', then generate it
+    :param par_dict: dictionary of paramaeters
+    :param ss_dict: dicitonary of steay state values
+    :param n_bin: number of elements in the np array
+    :param xlow: lower bound on x variables
+    :param xhigh: upper bound on x variable
+    :param ylow: lower bound on y variable
+    :param yhigh: upper bound on y variable
+    :param quiv_bool: boolean for the quiver plot of the nullcline
+    :param evecs_bool: boolean for the eigenvectors used to determine the trajectory of the plane
+    :param evecs: user supplied eigenvectors to determine the flow about the fised point
+    :param ics_dict: dictionary containing initial conditions
+    :return: plotted nullclines in matplotlib figures
+    """
+
+def plot_nullclines_rev(option='A', PTS='', par_dict=eq1_h1_par_dict, ss_dict=eq1_h1_ss, n_bin=500, xlow=None, xhigh=None,
+                        ylow=None, yhigh=None, quiv_bool=True, w0 = 0, distance = 0.15, z0 = 0,
+                        evecs_bool=False, evecs=None, ics_dict={}, par = 'risk', seq = '', title_bool = False, title = ''):
+    """
+    function to generate nullclines with a quiver plot field determined using sys_dx function
+    :param option: 'A' for SG vs IB, 'B' for SB vs IB, 'C' for IB vs V
+    :param PTS: pointset, if '', then generate it
+    :param par_dict: dictionary of paramaeters
+    :param ss_dict: dicitonary of steay state values
+    :param n_bin: number of elements in the np array
+    :param xlow: lower bound on x variables
+    :param xhigh: upper bound on x variable
+    :param ylow: lower bound on y variable
+    :param yhigh: upper bound on y variable
+    :param quiv_bool: boolean for the quiver plot of the nullcline
+    :param evecs_bool: boolean for the eigenvectors used to determine the trajectory of the plane
+    :param evecs: user supplied eigenvectors to determine the flow about the fised point
+    :param ics_dict: dictionary containing initial conditions
+    :return: plotted nullclines in matplotlib figures
+    """
+
+def plot_time(z, t, par_dict = par_dict_def):
+    """
+    function to plot a time series
+    :param z: state variables
+    :param t: time sequence
+    :param par_dict: dictionary for parameters
+    :return: plotted time series
+    """
+
+def generate_pointset(ode, save_bool = False, save_ss_data_name = 'infodemics_default_ss_data.txt', save_pts_data_name = 'infodemics_default_pts_data.txt'):
+    """
+    function to generate the pointset used for plotting temproal evolution and obtaining steady states!
+    :param ode: instance of the generator from the PyDSTool in generate_ode argument!
+    :param save_bool: boolean used to save the data
+    :param save_pts_data_name: name for the saving of the data for the pointset
+    :param save_ss_data_name: name for the saving of the data for the steady state
+    :return: pointset generated from the ode
+    """
+
+def get_data(PC, curve='EQrisk', special_point='H1', par='risk', par_ext='', par_dict=eq1_h1_par_dict):
+    """
+    function to get_data from the bifurcation plot!
+    :param curve: PC[curve]
+    :param special_point: PC[curve.getSpecialPoint(special_point)
+    :param par_ext: if '' do not use, otherwise there will be an additional parameter
+    :param par_dict, dictionary for parameters used in the bifurcation as the baseline
+    :return: par_dict, ss_dict <--> dictionary of parameters and steady state values
+    """
+
+def plot_time_perturbed_steady_state(ss_dict, tend=10_000, par='risk',
+                                     random_bool=True, eps=0.01, par_dict=eq1_h1_par_dict):
+    """
+    function to plot time series of the data
+    :param par_val: parameter used for simulated bifurcation
+    :param ss_dict: dictionrary of steady states for bifurcation
+    :param data: data obtained from get_data()
+    :param tend: final time for plot
+    :param ode: ode geneeated from generate_ode()
+    :param par: string used for the par_val
+    :param random_bool: boolean to use random initial conditions
+    :param eps: small value used to perturb about the steady state
+    :param par_dict: dictionary for parameters used for the bifurcation
+    :return: plotted in time figures and pts -- pointset
+    """
+
+def plot_time_perturbed_steady_state(ss_dict, tend=10_000, par='risk',
+                                     random_bool=True, eps=0.01, par_dict=eq1_h1_par_dict):
+    """
+    function to plot time series of the data
+    :param par_val: parameter used for simulated bifurcation
+    :param ss_dict: dictionrary of steady states for bifurcation
+    :param data: data obtained from get_data()
+    :param tend: final time for plot
+    :param ode: ode geneeated from generate_ode()
+    :param par: string used for the par_val
+    :param random_bool: boolean to use random initial conditions
+    :param eps: small value used to perturb about the steady state
+    :param par_dict: dictionary for parameters used for the bifurcation
+    :return: plotted in time figures and pts -- pointset
+    """
+
+def generate_1d_bifurcation(par = 'risk', par_d = eq1_h1_par_dict, ics_d = eq1_h1_ss, tend = 1_000, type = 'EP-C', max_step = None, min_step = None, step = None, max_points = None, forward_bool = True, backward_bool = True, rev_bool = False):
+    """
+    function to generate a 1 dimension bifurcation...
+    :param par: parameter used for bifurcation: risk, protection, infection_good, infection_bad, misinformation, education, recovery
+    :param par_d: dictionary for parameters used for time simisinformationlation and initialization
+    :param ics_d: dictionary for initial conditions for the time simisinformationlation
+    :param tend: final time of simisinformationlation
+    :param type: LP-C, FP-C, etc.
+    :param max_step: largest step size of bifurcation
+    :param min_step: smallest step size of bifurcation
+    :param step_size: size of the step for the bifurcation
+    :param max_points: total number of points max for the bifurcation
+    :param forward_bool: Boolean to compute forward
+    :param backward_bool: Boolean to compute backward
+    :param rev_bool: boolean for the revised model (short term == True)
+    :return: PC -- continuation curve for the bifurcation analysis
+    """
+
+def sample_1(par_dict = eq1_h1_par_dict, ics_dict = eq1_h1_ss, tf = 10_000, nullcline_bool = True, time_bool = True, bifurcation_bool = True):
+    """
+    function to generate a plotted simulation of the sample
+    :param par_dict: dictionary of parameters
+    :param ics_dict: dictionary of initial conditions
+    :param tf: final time of the simulation
+    :param nullcline_bool: boolean to plot the nullclines
+    :param time_bool: boolean to plot in the time simulation
+    :param bifurcation_bool: boolean to plot the bifurcation
+    :return: plotted simulation of the bifurcation
+    """
